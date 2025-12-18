@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "InputReader", menuName = "Project/Input/Input Reader")]
-public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions
+public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions, IInitializable, IGameService
 {
     private InputActions _inputActions;
 
@@ -15,7 +15,7 @@ public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions
     public event UnityAction InteractEvent;
     public event UnityAction OpenInventoryEvent;
 
-    private void OnEnable()
+    public void Initialize()
     {
         if (_inputActions == null)
         {
@@ -57,16 +57,16 @@ public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public void OnPrevious(InputAction.CallbackContext context)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
     public void OnNext(InputAction.CallbackContext context)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 }

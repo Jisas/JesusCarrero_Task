@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IInitializable, IGameService
 {
     [SerializeField] private PlayerVisuals Visuals;
     [SerializeField] private bool debugMode;
@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     public IdleState Idle { get; private set; }
     public MoveState Move { get; private set; }
 
-    private void Awake()
+    public void Initialize()
     {
         Mover = GetComponent<PlayerMover>();
         InputReader = GetComponent<EntityInputReader>();
@@ -45,5 +45,4 @@ public class PlayerController : MonoBehaviour
         currentState = newState;
         currentState.Enter();
     }
-
 }
