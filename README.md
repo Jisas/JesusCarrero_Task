@@ -2,6 +2,6 @@
 
 Prototyping task for selection process
 
-## Documentaci�n
+## Documentacion
 
 See the `Documentation~/` folder for tutorials and examples.
