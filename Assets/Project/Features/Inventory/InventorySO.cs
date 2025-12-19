@@ -21,13 +21,12 @@ public class InventorySO : ScriptableObject
             slots.Add(new InventorySlotInfo(null, 0, true));
         }
     }
-
-    public InventorySaveData GetSaveData()
+    public InventoryData GetSaveData()
     {
-        var data = new InventorySaveData();
+        var data = new InventoryData();
         foreach (var slot in slots)
         {
-            data.slots.Add(new SlotSaveData
+            data.slots.Add(new SlotData
             {
                 itemID = slot.isEmpty ? string.Empty : slot.item.ID,
                 amount = slot.amount,
@@ -36,8 +35,7 @@ public class InventorySO : ScriptableObject
         }
         return data;
     }
-
-    public void LoadFromSaveData(InventorySaveData data, ItemDatabaseSO database)
+    public void LoadFromSaveData(InventoryData data, ItemDatabaseSO database)
     {
         // Ensure that capacity matches demand.
         for (int i = 0; i < capacity; i++)
@@ -58,7 +56,6 @@ public class InventorySO : ScriptableObject
         }
         OnInventoryUpdated?.Invoke();
     }
-
     public bool AddItem(ItemSO item, int amount)
     {
         // 1. Attempting to stack in existing slots
@@ -88,19 +85,18 @@ public class InventorySO : ScriptableObject
 
         return false;
     }
-
     public void RemoveItem(int index)
     {
-        slots[index].item = null;
-        slots[index].amount = 0;
-    }
+        if (index < 0 || index >= slots.Count) return;
 
+        slots[index].Clear();
+        NotifyUpdated();
+    }
     public void SwapSlots(int indexA, int indexB)
     {
         (slots[indexB], slots[indexA]) = (slots[indexA], slots[indexB]);
         OnInventoryUpdated?.Invoke();
     }
-
     public void DropItem(int index)
     {
         if (index < 0 || index >= slots.Count) return;
@@ -108,7 +104,6 @@ public class InventorySO : ScriptableObject
         slots[index].Clear();
         OnInventoryUpdated?.Invoke(); // Aquí sí tienes permiso para invocarlo
     }
-
     public void UseItem(int index)
     {
         var slot = slots[index];
@@ -125,6 +120,10 @@ public class InventorySO : ScriptableObject
             slot.Clear();
         }
 
+        OnInventoryUpdated?.Invoke();
+    }
+    public void NotifyUpdated()
+    {
         OnInventoryUpdated?.Invoke();
     }
 

@@ -22,5 +22,5 @@ public abstract class ItemSO : ScriptableObject
     private void GenerateID() => id = System.Guid.NewGuid().ToString();
 
     // Strategy Pattern: Each item defines what it does when used.
-    public abstract bool Use();
+    public abstract void Use();
 }

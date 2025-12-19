@@ -16,13 +16,15 @@ public class InventoryDisplay : MonoBehaviour
     [SerializeField] private Image ghostIcon;
 
     private InventorySO _inventory;
+    private QuickSlotsSO _equipment;
     private readonly List<InventorySlot> _uiSlots = new();
 
     // --- General Methods ---
 
-    public void Initialize(InventorySO inventory)
+    public void Initialize(InventorySO inventory, QuickSlotsSO equipment)
     {
         _inventory = inventory;
+        _equipment = equipment;
 
         InventoryEvents.OnInventoryRequest += HandleDisplay;
         _inventory.OnInventoryUpdated += RefreshUI;
@@ -41,7 +43,6 @@ public class InventoryDisplay : MonoBehaviour
             newSlot.UpdateUI();
         }
     }
-
     private void HandleDisplay(bool shouldShow)
     {
         inventoryPanel.SetActive(shouldShow);
@@ -57,12 +58,11 @@ public class InventoryDisplay : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
         }
     }
-
     public void RefreshUI()
     {
         for (int i = 0; i < _uiSlots.Count; i++)
         {
-            // Volvemos a sincronizar el Slot de UI con el Slot de Datos del SO
+            // Resynchronize the UI Slot with the OS Data Slot
             _uiSlots[i].RefreshSlotData(_inventory.slots[i]);
         }
     }
@@ -75,7 +75,6 @@ public class InventoryDisplay : MonoBehaviour
         nameText.text = item.itemName;
         descriptionText.text = item.description;
     }
-
     public void Hide()
     {
         nameText.text = string.Empty;
@@ -90,16 +89,12 @@ public class InventoryDisplay : MonoBehaviour
         ghostIcon.sprite = icon;
         ghostIcon.gameObject.SetActive(true);
     }
-
     public void UpdateDragging(Vector2 position) => ghostIcon.transform.position = position;
-
     public void StopDragging() => ghostIcon.gameObject.SetActive(false);
-
     public void RequestSwap(int indexA, int indexB)
     {
         _inventory.SwapSlots(indexA, indexB);
     }
-
     public void RequestDrop(int index)
     {
         var slotInfo = _inventory.slots[index];
@@ -126,6 +121,29 @@ public class InventoryDisplay : MonoBehaviour
 
         // Data logic: The OS cleans itself and notifies
         _inventory.DropItem(index);
+    }
+
+
+    // --- Methods for equip items ---
+    public void RequestEquipItem(int index)
+    {
+        var slot = _inventory.slots[index];
+        if (slot.isEmpty) return;
+
+        if (slot.item.type == ItemType.Consumable)
+        {
+            bool equipped = _equipment.TryEquip(slot.item, slot.amount);
+
+            if (equipped)
+            {
+                _inventory.RemoveItem(index);
+                Hide();
+            }
+            else
+            {
+                Debug.LogWarning("No hay espacio en los QuickSlots");
+            }
+        }
     }
 
 

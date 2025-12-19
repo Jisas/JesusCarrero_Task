@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 
-public class InventorySlot : BaseSlot, IVisualSlot, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
+public class InventorySlot : BaseSlot, IVisualSlot, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler, IPointerClickHandler, ISubmitHandler
 {
     [SerializeField] private Image _icon;
     [SerializeField] private TextMeshProUGUI _amountText;
@@ -53,6 +53,12 @@ public class InventorySlot : BaseSlot, IVisualSlot, IBeginDragHandler, IDragHand
                 _amountText.gameObject.SetActive(false);
             }
         }
+    }
+
+    private void EquipItem()
+    {
+        if (SlotInfo.isEmpty) return;
+        _display.RequestEquipItem(_slotIndex);
     }
 
 
@@ -117,5 +123,18 @@ public class InventorySlot : BaseSlot, IVisualSlot, IBeginDragHandler, IDragHand
     public void OnDeselect(BaseEventData eventData)
     {
         _display.Hide();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            EquipItem();
+        }
+    }
+
+    public void OnSubmit(BaseEventData eventData)
+    {
+        EquipItem();
     }
 }

@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b811e27dda929b44962d4248253a22b, type: 3}
-  m_Name: TestItem
+  m_Name: Health_Potion
   m_EditorClassIdentifier: 
-  itemName: Test_A
+  itemName: Health Potion
   id: dabbbe83-20ec-4085-bce7-26acad5c7ead
-  icon: {fileID: 21300000, guid: 66075efbcb9bff846a0f8e81ee38b82b, type: 3}
+  icon: {fileID: 21300000, guid: 84a3a0d918a0911469b5ee65ae0b1b12, type: 3}
   worldPrefab: {fileID: 3392786834552889428, guid: 35dccb242ba20ef42bea1e7c47bb6db7, type: 3}
-  description: Testeo de visualizacion de data en UI
+  description: Restores 30 health points
+  type: 0
+  value: 30
   isStackable: 1
   maxStack: 99

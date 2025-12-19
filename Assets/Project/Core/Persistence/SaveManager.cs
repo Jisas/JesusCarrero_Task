@@ -3,7 +3,7 @@ using System.IO;
 
 public class SaveManager : MonoBehaviour, IInitializable, IGameService
 {
-    [SerializeField] private GameSaveData gameData = new();
+    [SerializeField] private GameData gameData = new();
 
     private string _savePath;
     private const string FileName = "save_slot_01.json";
@@ -13,34 +13,33 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
         _savePath = Path.Combine(Application.persistentDataPath, FileName);
     }
 
-    // --- Centralized Persistence Logic ---
 
-    public void SaveAllData(InventorySO inventory)
+    // --- Centralized Persistence Logic ---
+    public void SaveAllData(InventorySO inventory, QuickSlotsSO quickSlots)
     {
-        // Update the gameData object before saving
         gameData.inventoryData = inventory.GetSaveData();
+        gameData.quickSlotsData = quickSlots.GetSaveData();
+        gameData.selectedQuickSlotIndex = quickSlots.selectedIndex;
 
         string json = JsonUtility.ToJson(gameData, true);
         File.WriteAllText(_savePath, json);
-        Debug.Log($"Game data saved");
-    }
 
-    public void LoadAllData(InventorySO inventory, ItemDatabaseSO database)
+        Debug.Log("Game data saved");
+    }
+    public void LoadAllData(InventorySO inventory, QuickSlotsSO quickSlots, ItemDatabaseSO database)
     {
         if (!File.Exists(_savePath)) return;
 
         try
         {
             string json = File.ReadAllText(_savePath);
-            gameData = JsonUtility.FromJson<GameSaveData>(json);
+            gameData = JsonUtility.FromJson<GameData>(json);
 
-            // 1. Load inventory
             inventory.LoadFromSaveData(gameData.inventoryData, database);
+            quickSlots.LoadFromSaveData(gameData.quickSlotsData, database);
+            quickSlots.selectedIndex = gameData.selectedQuickSlotIndex;
 
-            // 2. Spawning items that were on the ground
             LoadDroppedItems(database);
-
-            Debug.Log("Game Data Load.");
         }
         catch (System.Exception e)
         {
@@ -50,10 +49,8 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
 
 
     // --- Query methods for other systems ---
-    public InventorySaveData GetInventoryData() => gameData.inventoryData;
-
+    public InventoryData GetInventoryData() => gameData.inventoryData;
     public bool IsItemCollected(string id) => gameData.collectedItemIDs.Contains(id);
-
     public void UnregisterWorldItem(string id, bool isDynamic)
     {
         if (isDynamic)
@@ -74,7 +71,6 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
             }
         }
     }
-
     public void RegisterDroppedItem(ItemSO item, Vector3 position, string uID)
     {
         gameData.droppedItems.Add(new DroppedItemData
@@ -84,7 +80,6 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
             position = position
         });
     }
-
     public void LoadDroppedItems(ItemDatabaseSO database)
     {
         foreach (var data in gameData.droppedItems)
@@ -102,18 +97,56 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
             }
         }
     }
-
     public void RemoveDroppedItem(string uID)
     {
         gameData.droppedItems.RemoveAll(i => i.uniqueID == uID);
     }
-
-    public void SaveFromEditor()
+    public static SettingsData LoadSettings()
     {
-        InventorySO inventory = ServiceLocator.Get<InventoryManager>().Inventory;
-        SaveAllData(inventory);
-        Debug.Log("<color=green>SaveManager: Manually saved data.</color>");
+        string path = Application.persistentDataPath + "/settings.json";
+
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            return JsonUtility.FromJson<SettingsData>(json);
+        }
+        else
+        {
+            Resolution[] resolutions = Screen.resolutions;
+            Resolution currentResolution = Screen.currentResolution;
+            int currentResolutionIndex = -1;
+
+            foreach (var res in resolutions)
+            {
+                if (res.width == currentResolution.width && res.height == currentResolution.height)
+                    currentResolutionIndex = resolutions.IndexOfItem(res);
+            }
+
+            return new SettingsData()
+            {
+                Quality = 0,
+                ScreenResolution = currentResolutionIndex,
+                ScreenMode = 0,
+                TextureResolution = 0,
+                ShadowQuality = 2,
+                ShadowResolution = 2,
+                RenderScale = 1,
+                FrameRate = 2,
+                Brightness = 1,
+                AntiAliasing = true,
+
+                GeneralVolume = 1,
+                MusicVolume = 1,
+                AmbientalVolume = 1,
+                EffectsVolume = 1,
+                UIVolume = 0.1f,
+            };
+        }
     }
+    public SettingsData GetSettingsData() => gameData.settingsData;
+
+
+    // --- Exclusive Editor's Block ---
 
     public void DeleteData()
     {
@@ -126,44 +159,63 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
         }
 
 #if UNITY_EDITOR 
-        CleanInventorySO(); // Exclusive Editor's Call
+        CleanAllScriptableObjects(); // Exclusive Editor's Call
 #endif
     }
 
-
-    // --- Exclusive Editor's Block ---
-
 #if UNITY_EDITOR
-    private void CleanInventorySO()
+    public void SaveFromEditor()
+    {
+        InventorySO inventory = ServiceLocator.Get<InventoryManager>().Inventory;
+        QuickSlotsSO equipment = ServiceLocator.Get<QuickSlotsSO>();
+
+        SaveAllData(inventory, equipment);
+        Debug.Log("<color=green>SaveManager: Manually saved data.</color>");
+    }
+
+    private void CleanAllScriptableObjects()
     {
         InventorySO inventory = null;
+        QuickSlotsSO quickSlots = null;
 
         if (Application.isPlaying)
         {
-            // En tiempo de ejecución usamos el ServiceLocator
             var invManager = ServiceLocator.Get<InventoryManager>();
             if (invManager != null) inventory = invManager.Inventory;
+
+            quickSlots = ServiceLocator.Get<QuickSlotsSO>();
         }
         else
         {
-            // En Modo Edición, buscamos el Asset directamente en la base de datos del proyecto
-            string[] guids = UnityEditor.AssetDatabase.FindAssets("t:InventorySO");
-            if (guids.Length > 0)
-            {
-                string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
-                inventory = UnityEditor.AssetDatabase.LoadAssetAtPath<InventorySO>(path);
-            }
+            inventory = FindAssetByType<InventorySO>();
+            quickSlots = FindAssetByType<QuickSlotsSO>();
         }
 
         if (inventory != null)
         {
             inventory.ClearInventory();
-            Debug.Log("<color=yellow>SaveManager: Inventory ScriptableObject reset successfully.</color>");
+            Debug.Log("<color=yellow>SaveManager: InventorySO reset.</color>");
         }
-        else
+
+        if (quickSlots != null)
         {
-            Debug.LogWarning("SaveManager: No se pudo encontrar el InventorySO para limpiar.");
+            quickSlots.ClearEquipment();
+            Debug.Log("<color=yellow>SaveManager: QuickSlotsSO reset.</color>");
         }
+
+        UnityEditor.AssetDatabase.SaveAssets();
+    }
+
+    // Helper
+    private T FindAssetByType<T>() where T : UnityEngine.Object
+    {
+        string[] guids = UnityEditor.AssetDatabase.FindAssets($"t:{typeof(T).Name}");
+        if (guids.Length > 0)
+        {
+            string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+            return UnityEditor.AssetDatabase.LoadAssetAtPath<T>(path);
+        }
+        return null;
     }
 #endif
 }

@@ -1,10 +1,10 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TestItem", menuName = "Project/Items/TestItem")]
-public class TestItem : ItemSO
+public class HealthPotion : ItemSO
 {
-    public override bool Use()
+    public override void Use()
     {
-        throw new System.NotImplementedException();
+        
     }
 }

@@ -1,6 +1,6 @@
 
 [System.Serializable]
-public class SlotSaveData
+public class SlotData
 {
     public string itemID;
     public int amount;

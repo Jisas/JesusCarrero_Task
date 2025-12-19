@@ -56,13 +56,7 @@ public class PlayerController : MonoBehaviour, IInitializable, IGameService
 
     private void HandleInventoryInput()
     {
-        // 1. Si ya estamos en el inventario, no hacemos nada (el estado se cerrará a sí mismo)
         if (currentState is InventoryState) return;
-
-        // 2. Si estamos en un estado que NO permite abrir inventario (ej: Muerto, Cinemática), salimos
-        // if (stateMachine.CurrentState is DeathState) return;
-
-        // 3. Si todo está bien, forzamos la transición
         TransitionTo(Inventory);
     }
 }
