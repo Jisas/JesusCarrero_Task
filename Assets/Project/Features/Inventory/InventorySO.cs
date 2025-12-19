@@ -4,8 +4,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerInventory", menuName = "Project/Inventory")]
 public class InventorySO : ScriptableObject
 {
-    public List<InventorySlotInfo> slots = new();
     public int capacity = 20;
+    [Space(5)]
+    public List<InventorySlotInfo> slots = new();
 
     public event System.Action OnInventoryUpdated;
 
@@ -92,5 +93,15 @@ public class InventorySO : ScriptableObject
     {
         (slots[indexB], slots[indexA]) = (slots[indexA], slots[indexB]);
         OnInventoryUpdated?.Invoke();
+    }
+
+    /// <summary>
+    /// Resets the slots to their empty state
+    /// </summary>
+    public void ClearInventory()
+    {
+        slots.Clear();
+        UnityEditor.EditorUtility.SetDirty(this);
+        UnityEditor.AssetDatabase.SaveAssets(); // Force Unity to save the change to disk
     }
 }

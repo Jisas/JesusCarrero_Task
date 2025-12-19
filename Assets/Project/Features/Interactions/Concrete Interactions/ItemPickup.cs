@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class ItemPickup : MonoBehaviour, IInteractable
@@ -11,11 +10,13 @@ public class ItemPickup : MonoBehaviour, IInteractable
 
     public void Interact(PlayerController player)
     {
-        // We access the inventory through the ServiceLocator
         var inventory = ServiceLocator.Get<InventoryManager>().Inventory;
 
         if (inventory.AddItem(itemData, amount))
         {
+            string id = GetComponent<WorldItem>().uniqueID;
+            ServiceLocator.Get<SaveManager>().RegisterPickup(id);
+
             Destroy(gameObject);
         }
     }

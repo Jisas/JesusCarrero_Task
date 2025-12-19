@@ -25,12 +25,11 @@ public class InventoryDisplay : MonoBehaviour
 
     private void HandleDisplay(bool shouldShow)
     {
-        Debug.Log("Entre");
         inventoryPanel.SetActive(shouldShow);
 
         if (shouldShow)
         {
-            // Seleccionamos el primer slot para soporte de mando/teclado
+            // Select the first slot for controller/keyboard support
             var firstSlot = slotsPanel.GetChild(0).gameObject;
             EventSystem.current.SetSelectedGameObject(firstSlot);
         }

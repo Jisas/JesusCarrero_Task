@@ -1,5 +1,4 @@
 using UnityEngine.UI;
-using UnityEngine;
 using TMPro;
 
 public class InventorySlot : BaseSlot, IVisualSlot

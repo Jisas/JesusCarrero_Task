@@ -3,10 +3,14 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine;
 
+/// <summary>
+/// ATTENTION! This entire class has been brought over from another personal project.
+/// Automatically handles scrolling for gamepad and keyboard support
+/// </summary>
 [RequireComponent(typeof(ScrollRect))]
 public class AutoScroll : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [Tooltip("asegúrate de que coincide con el grid")]
+    [Tooltip("make sure it matches the grid")]
     public int columns = 3;
     public float scrollSpeed = 10f;
     public bool isInGrid = true;
@@ -42,7 +46,7 @@ public class AutoScroll : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
             if (selectedIndex != lastSelectedIndex)
             {
-                // Solo scroll si el cambio es vertical
+                // Only scroll if the change is vertical
                 if (lastSelectedIndex >= 0 && selectedIndex >= 0)
                 {
                     int diff = selectedIndex - lastSelectedIndex;
@@ -53,7 +57,7 @@ public class AutoScroll : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 }
                 else
                 {
-                    // Primer selección, haz scroll
+                    // First selection, scroll down
                     ScrollToSelected(true);
                 }
 
@@ -90,7 +94,7 @@ public class AutoScroll : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         float contentHeight = contentRT.rect.height;
         float viewportHeight = m_ScrollRect.viewport.rect.height;
 
-        // Posición del pivote inferior del contenido
+        // Position of the lower pivot of the content
         float minY = float.MaxValue;
         float maxY = float.MinValue;
 
@@ -99,7 +103,7 @@ public class AutoScroll : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             if (s == null || s.gameObject == null) continue;
             var rt = s.GetComponent<RectTransform>();
             if (rt == null) continue;
-            float y = -rt.anchoredPosition.y; // invertido porque Y en UI es hacia abajo negativo
+            float y = -rt.anchoredPosition.y; // reversed because Y in UI is downward, negative
             minY = Mathf.Min(minY, y);
             maxY = Mathf.Max(maxY, y);
         }
@@ -110,10 +114,10 @@ public class AutoScroll : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (maxY > minY)
             t = (selectedY - minY) / (maxY - minY);
 
-        // Interpolamos de 1 (inicio abajo) a 0 (final arriba)
+        // We interpolate from 1 (start at bottom) to 0 (end at top).
         float normalizedY = 1f - t;
 
-        // Por si el contenido es menor que el viewport
+        // If the content is smaller than the viewport
         if (contentHeight <= viewportHeight)
             normalizedY = 1f;
 
