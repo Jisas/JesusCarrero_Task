@@ -26,7 +26,9 @@ public class GameBootstrapper : MonoBehaviour
         // 2. Ordered initialization
         saveManager.Initialize();
         playerInventory.Initialize();
+
         saveManager.LoadAllData(playerInventory.Inventory, itemDB);
+
         inputReader.Initialize();
         playerController.Initialize();
         dialogueDisplay.Initialize();

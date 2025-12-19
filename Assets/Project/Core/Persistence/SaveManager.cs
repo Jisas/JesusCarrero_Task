@@ -1,7 +1,5 @@
 using UnityEngine;
 using System.IO;
-using static Unity.VisualScripting.LudiqRootObjectEditor;
-using UnityEngine.Splines.ExtrusionShapes;
 
 public class SaveManager : MonoBehaviour, IInitializable, IGameService
 {
@@ -24,7 +22,7 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
 
         string json = JsonUtility.ToJson(gameData, true);
         File.WriteAllText(_savePath, json);
-        Debug.Log($"Game data saved at: {_savePath}");
+        Debug.Log($"Game data saved");
     }
 
     public void LoadAllData(InventorySO inventory, ItemDatabaseSO database)
@@ -36,8 +34,11 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
             string json = File.ReadAllText(_savePath);
             gameData = JsonUtility.FromJson<GameSaveData>(json);
 
-            // Individual inventory load
+            // 1. Load inventory
             inventory.LoadFromSaveData(gameData.inventoryData, database);
+
+            // 2. Spawning items that were on the ground
+            LoadDroppedItems(database);
 
             Debug.Log("Game Data Load.");
         }
@@ -47,19 +48,65 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
         }
     }
 
+
     // --- Query methods for other systems ---
+    public InventorySaveData GetInventoryData() => gameData.inventoryData;
 
     public bool IsItemCollected(string id) => gameData.collectedItemIDs.Contains(id);
 
-    public void RegisterPickup(string id)
+    public void UnregisterWorldItem(string id, bool isDynamic)
     {
-        if (!gameData.collectedItemIDs.Contains(id))
+        if (isDynamic)
         {
-            gameData.collectedItemIDs.Add(id);
+            // If the object was temporary (thrown by the player), 
+            // we remove it from the list of existing objects on the ground.
+            gameData.droppedItems.RemoveAll(i => i.uniqueID == id);
+            Debug.Log($"Item dinámico {id} removido de la persistencia.");
+        }
+        else
+        {
+            // If the object was originally on the map, we mark it as 
+            // “permanently collected.”
+            if (!gameData.collectedItemIDs.Contains(id))
+            {
+                gameData.collectedItemIDs.Add(id);
+                Debug.Log($"Static item {id} marked as collected.");
+            }
         }
     }
 
-    public InventorySaveData GetInventoryData() => gameData.inventoryData;
+    public void RegisterDroppedItem(ItemSO item, Vector3 position, string uID)
+    {
+        gameData.droppedItems.Add(new DroppedItemData
+        {
+            itemID = item.ID,
+            uniqueID = uID,
+            position = position
+        });
+    }
+
+    public void LoadDroppedItems(ItemDatabaseSO database)
+    {
+        foreach (var data in gameData.droppedItems)
+        {
+            ItemSO item = database.GetItemByID(data.itemID);
+            if (item == null || item.worldPrefab == null) continue;
+
+            GameObject go = Instantiate(item.worldPrefab, data.position, Quaternion.identity);
+            WorldItem worldItem = go.GetComponent<WorldItem>();
+
+            if (worldItem != null)
+            {
+                worldItem.uniqueID = data.uniqueID;
+                worldItem.isDynamic = true;
+            }
+        }
+    }
+
+    public void RemoveDroppedItem(string uID)
+    {
+        gameData.droppedItems.RemoveAll(i => i.uniqueID == uID);
+    }
 
     public void SaveFromEditor()
     {
@@ -67,6 +114,7 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
         SaveAllData(inventory);
         Debug.Log("<color=green>SaveManager: Manually saved data.</color>");
     }
+
     public void DeleteData()
     {
         _savePath = Path.Combine(Application.persistentDataPath, FileName);
@@ -81,6 +129,7 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
         CleanInventorySO(); // Exclusive Editor's Call
 #endif
     }
+
 
     // --- Exclusive Editor's Block ---
 

@@ -6,6 +6,7 @@ public abstract class ItemSO : ScriptableObject
     public string itemName;
     [SerializeField] private string id;
     public Sprite icon;
+    public GameObject worldPrefab;
     [TextArea] public string description;
     public bool isStackable;
     public int maxStack = 99;

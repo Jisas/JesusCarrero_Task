@@ -2,14 +2,17 @@ using UnityEngine;
 
 public class WorldItem : MonoBehaviour, IGameService
 {
+    public bool isDynamic = true;
     public string uniqueID;
 
     private void Start()
     {
+        if (isDynamic) return;
+
         // Ask the SaveManager if this ID has already been collected
         if (ServiceLocator.Get<SaveManager>().IsItemCollected(uniqueID))
         {
-            gameObject.SetActive(false); // O Destroy(gameObject)
+            Destroy(gameObject);
         }
     }
 

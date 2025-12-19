@@ -89,11 +89,26 @@ public class InventorySO : ScriptableObject
         return false;
     }
 
+    public void RemoveItem(int index)
+    {
+        slots[index].item = null;
+        slots[index].amount = 0;
+    }
+
     public void SwapSlots(int indexA, int indexB)
     {
         (slots[indexB], slots[indexA]) = (slots[indexA], slots[indexB]);
         OnInventoryUpdated?.Invoke();
     }
+
+    public void DropItem(int index)
+    {
+        if (index < 0 || index >= slots.Count) return;
+
+        slots[index].Clear();
+        OnInventoryUpdated?.Invoke(); // Aquí sí tienes permiso para invocarlo
+    }
+
 
     /// <summary>
     /// Resets the slots to their empty state

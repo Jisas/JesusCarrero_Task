@@ -14,9 +14,8 @@ public class ItemPickup : MonoBehaviour, IInteractable
 
         if (inventory.AddItem(itemData, amount))
         {
-            string id = GetComponent<WorldItem>().uniqueID;
-            ServiceLocator.Get<SaveManager>().RegisterPickup(id);
-
+            WorldItem info = GetComponent<WorldItem>();
+            ServiceLocator.Get<SaveManager>().UnregisterWorldItem(info.uniqueID, info.isDynamic);
             Destroy(gameObject);
         }
     }
