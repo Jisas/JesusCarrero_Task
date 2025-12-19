@@ -16,6 +16,6 @@ MonoBehaviour:
   id: dabbbe83-20ec-4085-bce7-26acad5c7ead
   icon: {fileID: 21300000, guid: 66075efbcb9bff846a0f8e81ee38b82b, type: 3}
   worldPrefab: {fileID: 3392786834552889428, guid: 35dccb242ba20ef42bea1e7c47bb6db7, type: 3}
-  description: 
+  description: Testeo de visualizacion de data en UI
   isStackable: 1
   maxStack: 99

@@ -109,6 +109,24 @@ public class InventorySO : ScriptableObject
         OnInventoryUpdated?.Invoke(); // Aquí sí tienes permiso para invocarlo
     }
 
+    public void UseItem(int index)
+    {
+        var slot = slots[index];
+        if (slot.isEmpty) return;
+        
+        slot.item.Use(); // Execute item logic
+
+        if (slot.item.isStackable && slot.amount > 1)
+        {
+            slot.amount--;
+        }
+        else
+        {
+            slot.Clear();
+        }
+
+        OnInventoryUpdated?.Invoke();
+    }
 
     /// <summary>
     /// Resets the slots to their empty state

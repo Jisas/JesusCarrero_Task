@@ -8,6 +8,11 @@ public abstract class ItemSO : ScriptableObject
     public Sprite icon;
     public GameObject worldPrefab;
     [TextArea] public string description;
+
+    [Header("Settings")]
+    public ItemType type;
+    [Tooltip("Will be use just for consumables")] 
+    public float value;
     public bool isStackable;
     public int maxStack = 99;
 

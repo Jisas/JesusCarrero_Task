@@ -2202,6 +2202,17 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1550157294 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9032434512700633928, guid: b3330f0089b498e40a52ccc1ef4e8e20, type: 3}
+  m_PrefabInstance: {fileID: 1595251864}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1595251864
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2244,11 +2255,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7483824034379718383, guid: b3330f0089b498e40a52ccc1ef4e8e20, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.17018889
+      value: 0.56102145
       objectReference: {fileID: 0}
     - target: {fileID: 7483824034379718383, guid: b3330f0089b498e40a52ccc1ef4e8e20, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.00000037567574
+      value: 0.0000001987363
       objectReference: {fileID: 0}
     - target: {fileID: 7727081878985196381, guid: b3330f0089b498e40a52ccc1ef4e8e20, type: 3}
       propertyPath: m_Pivot.x
@@ -2806,6 +2817,8 @@ MonoBehaviour:
   inventoryPanel: {fileID: 584309366}
   slotPrefab: {fileID: 8347998768405737560, guid: e1bfb8df0de3bdc4d88915d0a3b09b75, type: 3}
   slotsPanel: {fileID: 1595251866}
+  nameText: {fileID: 2071965734}
+  descriptionText: {fileID: 1550157294}
   ghostIcon: {fileID: 840582688}
 --- !u!1 &2050768155
 GameObject:
@@ -2918,6 +2931,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2050768155}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2071965734 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1489740434840189475, guid: b3330f0089b498e40a52ccc1ef4e8e20, type: 3}
+  m_PrefabInstance: {fileID: 1595251864}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2089189420
 GameObject:
   m_ObjectHideFlags: 0

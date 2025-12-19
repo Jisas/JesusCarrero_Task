@@ -3,13 +3,15 @@ using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 
-public class InventorySlot : BaseSlot, IVisualSlot, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+public class InventorySlot : BaseSlot, IVisualSlot, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler, IDeselectHandler
 {
     [SerializeField] private Image _icon;
     [SerializeField] private TextMeshProUGUI _amountText;
 
     private int _slotIndex;
     private InventoryDisplay _display;
+
+    // ----- General -----
 
     public void SetUp(int index, InventoryDisplay display, InventorySlotInfo data)
     {
@@ -53,6 +55,7 @@ public class InventorySlot : BaseSlot, IVisualSlot, IBeginDragHandler, IDragHand
         }
     }
 
+
     // ----- Interface Implementations -----
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -88,5 +91,31 @@ public class InventorySlot : BaseSlot, IVisualSlot, IBeginDragHandler, IDragHand
         {
             _display.RequestSwap(sourceSlot._slotIndex, this._slotIndex);
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (SlotInfo.isEmpty) return;
+        _display.Show(SlotInfo.item);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        _display.Hide();
+    }
+
+    public void OnSelect(BaseEventData eventData)
+    {
+        if (SlotInfo.isEmpty)
+        {
+            _display.Hide();
+            return;
+        }
+        _display.Show(SlotInfo.item);
+    }
+
+    public void OnDeselect(BaseEventData eventData)
+    {
+        _display.Hide();
     }
 }

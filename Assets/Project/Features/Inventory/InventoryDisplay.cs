@@ -2,18 +2,23 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
 
 public class InventoryDisplay : MonoBehaviour
 {
     [SerializeField] private GameObject inventoryPanel;
     [SerializeField] private GameObject slotPrefab;
     [SerializeField] private Transform slotsPanel;
+    [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI descriptionText;
 
     [Header("Drag & Drop Visuals")]
     [SerializeField] private Image ghostIcon;
 
     private InventorySO _inventory;
     private readonly List<InventorySlot> _uiSlots = new();
+
+    // --- General Methods ---
 
     public void Initialize(InventorySO inventory)
     {
@@ -62,6 +67,22 @@ public class InventoryDisplay : MonoBehaviour
         }
     }
 
+
+    // --- Data Display Methods ---
+
+    public void Show(ItemSO item)
+    {
+        nameText.text = item.itemName;
+        descriptionText.text = item.description;
+    }
+
+    public void Hide()
+    {
+        nameText.text = string.Empty;
+        descriptionText.text = string.Empty;
+    }
+
+
     // --- Methods for Drag & Drop ---
 
     public void StartDragging(Sprite icon)
@@ -106,6 +127,9 @@ public class InventoryDisplay : MonoBehaviour
         // Data logic: The OS cleans itself and notifies
         _inventory.DropItem(index);
     }
+
+
+    // --- Monobehaviour ---
 
     private void OnDestroy()
     {
