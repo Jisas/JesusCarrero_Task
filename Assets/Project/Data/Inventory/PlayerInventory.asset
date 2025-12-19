@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slots:
   - item: {fileID: 11400000, guid: e5d1cc1ab4d506b478d9254a1e6ac2bc, type: 2}
-    amount: 0
+    amount: 3
     isEmpty: 0
   - item: {fileID: 0}
     amount: 0
@@ -73,4 +73,4 @@ MonoBehaviour:
   - item: {fileID: 0}
     amount: 0
     isEmpty: 1
-  capacity: 20
+  capacity: 21

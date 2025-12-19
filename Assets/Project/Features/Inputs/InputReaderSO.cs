@@ -3,18 +3,18 @@ using UnityEngine.Events;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "InputReader", menuName = "Project/Input/Input Reader")]
-public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions, IInitializable, IGameService
+public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions, InputActions.IUIActions, IInitializable, IGameService
 {
     private InputActions _inputActions;
 
     // Values that states can read (Polling)
+    public InputActions InputActions => _inputActions;
     public Vector2 MoveValue { get; private set; }
-    public bool InteractionValue {  get; private set; }
 
     // Events for specific actions (Observer)
     public event UnityAction<Vector2> MoveEvent;
     public event UnityAction InteractEvent;
-    public event UnityAction OpenInventoryEvent;
+    public event UnityAction InventoryRequest;
 
     public void Initialize()
     {
@@ -22,16 +22,20 @@ public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions, IIni
         {
             _inputActions = new InputActions();
             _inputActions.Player.SetCallbacks(this);
+            _inputActions.UI.SetCallbacks(this);
         }
     }
 
-    public void EnablePlayerInput()
+    public void enablePlayerInputs() => _inputActions.Player.Enable();
+    public void DisablePlayerInputs() => _inputActions.Player.Disable();
+
+    public void SwitchToPlayerInput()
     {
         _inputActions.UI.Disable();
         _inputActions.Player.Enable();
     }
 
-    public void EnableUIInput()
+    public void SwitchToUIInput()
     {
         _inputActions.Player.Disable();
         _inputActions.UI.Enable();
@@ -46,17 +50,12 @@ public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions, IIni
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        if (context.phase == InputActionPhase.Performed)
-        {
-            InteractEvent?.Invoke();
-        }
+        if (context.performed) InteractEvent?.Invoke();
     }
-
-    //public void OnOpenInventory(InputAction.CallbackContext context)
-    //{
-    //    if (context.phase == InputActionPhase.Performed)
-    //        OpenInventoryEvent?.Invoke();
-    //}
+    public void OnInventoryRequest(InputAction.CallbackContext context)
+    {
+        if (context.performed) InventoryRequest?.Invoke();
+    }
 
     public void OnAttack(InputAction.CallbackContext context)
     {
@@ -69,6 +68,56 @@ public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions, IIni
     }
 
     public void OnNext(InputAction.CallbackContext context)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public void OnNavigate(InputAction.CallbackContext context)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public void OnSubmit(InputAction.CallbackContext context)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public void OnCancel(InputAction.CallbackContext context)
+    {
+        ///throw new System.NotImplementedException();
+    }
+
+    public void OnPoint(InputAction.CallbackContext context)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public void OnClick(InputAction.CallbackContext context)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public void OnRightClick(InputAction.CallbackContext context)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public void OnMiddleClick(InputAction.CallbackContext context)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public void OnScrollWheel(InputAction.CallbackContext context)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public void OnTrackedDevicePosition(InputAction.CallbackContext context)
+    {
+        //throw new System.NotImplementedException();
+    }
+
+    public void OnTrackedDeviceOrientation(InputAction.CallbackContext context)
     {
         //throw new System.NotImplementedException();
     }

@@ -783,7 +783,7 @@ Transform:
   m_GameObject: {fileID: 334110539}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.58, z: 0.91}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -949,6 +949,11 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &584309366 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8568411568952563419, guid: b3330f0089b498e40a52ccc1ef4e8e20, type: 3}
+  m_PrefabInstance: {fileID: 1595251864}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &620723251
 GameObject:
   m_ObjectHideFlags: 0
@@ -1477,7 +1482,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactionPoint: {fileID: 334110540}
   interactionCheckFrequency: 0.1
-  interactionRadius: 1.5
+  interactionRadius: 0.42
   interactableMask:
     serializedVersion: 2
     m_Bits: 1
@@ -2007,6 +2012,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6669303745103035692, guid: b3330f0089b498e40a52ccc1ef4e8e20, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1228.465
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669303745103035692, guid: b3330f0089b498e40a52ccc1ef4e8e20, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0.000030517578
       objectReference: {fileID: 0}
@@ -2113,7 +2122,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4017127987965109304, guid: b3330f0089b498e40a52ccc1ef4e8e20, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1928948528}
   m_SourcePrefab: {fileID: 100100000, guid: b3330f0089b498e40a52ccc1ef4e8e20, type: 3}
 --- !u!224 &1595251865 stripped
 RectTransform:
@@ -2311,6 +2323,26 @@ Transform:
   - {fileID: 1996835270}
   m_Father: {fileID: 1202209510}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1928948524 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4017127987965109304, guid: b3330f0089b498e40a52ccc1ef4e8e20, type: 3}
+  m_PrefabInstance: {fileID: 1595251864}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1928948528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1928948524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f38476ee5ffea5418df69bbfb4df858, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoScroll
+  columns: 3
+  scrollSpeed: 10
+  isInGrid: 1
 --- !u!1 &1979895676
 GameObject:
   m_ObjectHideFlags: 0
@@ -2386,6 +2418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76aa47cf7dd23bb4c890208049e7d753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryPanel: {fileID: 584309366}
   slotPrefab: {fileID: 8347998768405737560, guid: e1bfb8df0de3bdc4d88915d0a3b09b75, type: 3}
   slotsPanel: {fileID: 1595251866}
 --- !u!1 &2050768155

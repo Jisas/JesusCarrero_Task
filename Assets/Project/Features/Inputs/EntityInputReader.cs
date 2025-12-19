@@ -18,7 +18,7 @@ public class EntityInputReader : MonoBehaviour
         {
             SetCursorState(true);
         }
-        inputReader.EnablePlayerInput();
+        inputReader.SwitchToPlayerInput();
     }
 
     public void SetCursorState(bool isLocked)
@@ -32,12 +32,12 @@ public class EntityInputReader : MonoBehaviour
     public void SwitchToUI()
     {
         SetCursorState(false);
-        inputReader.EnableUIInput();
+        inputReader.SwitchToUIInput();
     }
 
     public void SwitchToPlayer()
     {
         SetCursorState(true);
-        inputReader.EnablePlayerInput();
+        inputReader.SwitchToPlayerInput();
     }
 }
