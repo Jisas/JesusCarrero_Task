@@ -12,5 +12,65 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4f079d1eba933e4fbf6cf503db1c804, type: 3}
   m_Name: PlayerInventory
   m_EditorClassIdentifier: 
-  slots: []
+  slots:
+  - item: {fileID: 11400000, guid: e5d1cc1ab4d506b478d9254a1e6ac2bc, type: 2}
+    amount: 0
+    isEmpty: 0
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
+  - item: {fileID: 0}
+    amount: 0
+    isEmpty: 1
   capacity: 20

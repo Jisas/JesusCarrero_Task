@@ -6,8 +6,8 @@ public class IdleState : PlayerState
 
     public override void Enter() 
     {
-        if (context == null) return;
         if (context.DebugMode) Debug.Log("Enter Idle State");
+        context.InputReader.Input.InteractEvent += OnInteractPressed;
     }
 
     public override void Update() 
@@ -22,7 +22,15 @@ public class IdleState : PlayerState
 
     public override void Exit() 
     {
-        if (context == null) return;
         if (context.DebugMode) Debug.Log("Exit Idle State");
+        context.InputReader.Input.InteractEvent -= OnInteractPressed;
+    }
+
+    private void OnInteractPressed()
+    {
+        if (context.Interactor.HasTarget)
+        {
+            context.TransitionTo(context.Interact);
+        }
     }
 }

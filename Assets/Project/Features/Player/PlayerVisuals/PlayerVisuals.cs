@@ -9,6 +9,6 @@ public class PlayerVisuals : MonoBehaviour
 
     public void UpdateMoveAnimation(float normalizedSpeed)
     {
-        //animator.SetFloat(SpeedHash, normalizedSpeed);
+        animator.SetFloat(SpeedHash, normalizedSpeed);
     }
 }

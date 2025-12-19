@@ -25,14 +25,14 @@ public class GameBootstrapper : MonoBehaviour
 
         bool success = saveManager.LoadInventory(playerInventory.Inventory, itemDB);
 
-        if (success) Debug.Log("Inventario cargado desde archivo.");
-        else Debug.Log("Iniciando con inventario nuevo.");
+        if (success) Debug.Log("Inventory loaded from file.");
+        else Debug.Log("Starting with new inventory.");
 
         inputReader.Initialize();
         playerController.Initialize();
 
         // 3. Notify that the game is ready
-        Debug.Log("Sistemas inicializados con éxito.");
+        Debug.Log("Systems successfully initialized.");
     }
 
     private void OnApplicationQuit()

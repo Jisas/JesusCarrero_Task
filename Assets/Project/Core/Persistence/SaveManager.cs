@@ -41,8 +41,15 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
         }
     }
 
+    [ContextMenu("Delete Inventory Data")]
     public void DeleteSave()
     {
-        if (File.Exists(_savePath)) File.Delete(_savePath);
+        _savePath = Path.Combine(Application.persistentDataPath, FileName);
+
+        if (File.Exists(_savePath))
+        {
+            File.Delete(_savePath);
+            Debug.Log("inventory data was delete");
+        }
     }
 }

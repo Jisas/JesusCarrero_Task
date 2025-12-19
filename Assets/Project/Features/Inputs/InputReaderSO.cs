@@ -9,6 +9,7 @@ public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions, IIni
 
     // Values that states can read (Polling)
     public Vector2 MoveValue { get; private set; }
+    public bool InteractionValue {  get; private set; }
 
     // Events for specific actions (Observer)
     public event UnityAction<Vector2> MoveEvent;
@@ -46,7 +47,9 @@ public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions, IIni
     public void OnInteract(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
+        {
             InteractEvent?.Invoke();
+        }
     }
 
     //public void OnOpenInventory(InputAction.CallbackContext context)

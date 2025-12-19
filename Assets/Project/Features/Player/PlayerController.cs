@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IInitializable, IGameService
 {
-    [SerializeField] private PlayerVisuals Visuals;
+    [SerializeField] private PlayerVisuals visuals;
     [SerializeField] private bool debugMode;
 
     public PlayerMover Mover { get; private set; }
     public EntityInputReader InputReader { get; private set; }
+    public PlayerInteractor Interactor { get; set; }
     public bool DebugMode => debugMode;
 
     private PlayerState currentState;
@@ -14,20 +15,23 @@ public class PlayerController : MonoBehaviour, IInitializable, IGameService
     // Status cache to avoid constant 'new'
     public IdleState Idle { get; private set; }
     public MoveState Move { get; private set; }
+    public InteractState Interact { get; private set; }
 
     public void Initialize()
     {
         Mover = GetComponent<PlayerMover>();
+        Interactor = GetComponent<PlayerInteractor>();
         InputReader = GetComponent<EntityInputReader>();
 
         // Initialize states only once
         Idle = new IdleState(this);
         Move = new MoveState(this);
+        Interact = new InteractState(this);
     }
 
     private void OnEnable()
     {
-        Mover.OnSpeedChanged += Visuals.UpdateMoveAnimation;
+        //Mover.OnSpeedChanged += visuals.UpdateMoveAnimation;
     }
 
     private void Start() => TransitionTo(Idle);
@@ -36,7 +40,7 @@ public class PlayerController : MonoBehaviour, IInitializable, IGameService
 
     private void OnDisable()
     {
-        Mover.OnSpeedChanged -= Visuals.UpdateMoveAnimation;
+        //Mover.OnSpeedChanged -= visuals.UpdateMoveAnimation;
     }
 
     public void TransitionTo(PlayerState newState)
