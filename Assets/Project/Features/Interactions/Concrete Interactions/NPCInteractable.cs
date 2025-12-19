@@ -2,13 +2,18 @@ using UnityEngine;
 
 public class NPCInteractable : MonoBehaviour, IInteractable
 {
-    [SerializeField] private string npcName;
-    [SerializeField] private string[] dialogueLines;
+    [SerializeField] private DialogueSO dialogueData;
 
-    public string InteractionPrompt => $"Talk to {npcName}";
+    public InteractionType Type => InteractionType.Talk;
+    public string InteractionPrompt => $"Hablar con {dialogueData.speakerName}";
 
     public void Interact(PlayerController player)
     {
-        // Trigger dialog system
+        var dialogueManager = ServiceLocator.Get<DialogueManager>();
+
+        if (!dialogueManager.IsDialogueActive)
+        {
+            dialogueManager.StartDialogue(dialogueData);
+        }
     }
 }

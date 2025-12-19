@@ -10,6 +10,8 @@ public class GameBootstrapper : MonoBehaviour
     [SerializeField] private SaveManager saveManager;
     [SerializeField] private PlayerController playerController;
     [SerializeField] private InventoryManager playerInventory;
+    [SerializeField] private DialogueManager dialogueManager;
+    [SerializeField] private DialogueDisplay dialogueDisplay;
 
     private void Awake()
     {
@@ -18,6 +20,7 @@ public class GameBootstrapper : MonoBehaviour
         ServiceLocator.Register<InputReaderSO>(inputReader);
         ServiceLocator.Register<InventoryManager>(playerInventory);
         ServiceLocator.Register<PlayerController>(playerController);
+        ServiceLocator.Register<DialogueManager>(dialogueManager);
 
         // 2. Ordered initialization
         saveManager.Initialize();
@@ -30,6 +33,7 @@ public class GameBootstrapper : MonoBehaviour
 
         inputReader.Initialize();
         playerController.Initialize();
+        dialogueDisplay.Initialize();
 
         // 3. Notify that the game is ready
         Debug.Log("Systems successfully initialized.");

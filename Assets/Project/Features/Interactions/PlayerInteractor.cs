@@ -9,6 +9,7 @@ public class PlayerInteractor : MonoBehaviour
     [SerializeField] private LayerMask interactableMask;
 
     public bool HasTarget => _currentInteractable != null;
+    public IInteractable CurrentTarget => _currentInteractable;
 
     private readonly Collider[] _colliders = new Collider[3]; // Buffer to optimize GC
     private IInteractable _currentInteractable;

@@ -3,12 +3,11 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour, IInitializable, IGameService
 {
     [SerializeField] private PlayerVisuals visuals;
-    [SerializeField] private bool debugMode;
 
-    public PlayerMover Mover { get; private set; }
     public EntityInputReader InputReader { get; private set; }
+    public PlayerMover Mover { get; private set; }
     public PlayerInteractor Interactor { get; set; }
-    public bool DebugMode => debugMode;
+    public PlayerVisuals Visuals { get; private set; }
 
     private PlayerState currentState;
 

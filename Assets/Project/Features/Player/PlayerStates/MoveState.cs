@@ -6,7 +6,6 @@ public class MoveState : PlayerState
 
     public override void Enter()
     {
-        if (context.DebugMode) Debug.Log("Enter Move State");
         context.InputReader.Input.InteractEvent += OnInteractPressed;
     }
 
@@ -25,7 +24,6 @@ public class MoveState : PlayerState
 
     public override void Exit()
     {
-        if (context.DebugMode) Debug.Log("Exit Move State");
         context.InputReader.Input.InteractEvent -= OnInteractPressed;
     }
 
