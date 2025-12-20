@@ -11,6 +11,7 @@ public class GameBootstrapper : MonoBehaviour
     [SerializeField] private SaveManager saveManager;
     [SerializeField] private SettingsManager settingsManager;
     [SerializeField] private PlayerController playerController;
+    [SerializeField] private PlayerStats playerStats;
     [SerializeField] private InventoryManager inventoryManager;
     [SerializeField] private EquipmentManager equipmentManager;
     [SerializeField] private DialogueManager dialogueManager;
@@ -26,6 +27,7 @@ public class GameBootstrapper : MonoBehaviour
         ServiceLocator.Register<SaveManager>(saveManager);
         ServiceLocator.Register<SettingsManager>(settingsManager);
         ServiceLocator.Register<PlayerController>(playerController);
+        ServiceLocator.Register<PlayerStats>(playerStats);
         ServiceLocator.Register<InventoryManager>(inventoryManager);
         ServiceLocator.Register<DialogueManager>(dialogueManager);
         ServiceLocator.Register<QuickSlotDisplay>(equipmentDislay);
@@ -42,6 +44,7 @@ public class GameBootstrapper : MonoBehaviour
         equipmentManager.Initialize();
         equipmentDislay.Initialize();
         playerController.Initialize();
+        playerStats.Initialize();
         dialogueDisplay.Initialize();
 
         // 3. Notify that the game is ready

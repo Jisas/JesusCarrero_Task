@@ -4,8 +4,9 @@ public class PlayerVisuals : MonoBehaviour
 {
     [SerializeField] private Animator animator;
 
-    // I cache the parameter hash to optimize performance.
-    private static readonly int SpeedHash = Animator.StringToHash("Speed");
+    // Cache the parameter hash to optimize performance.
+    private readonly int speedHash = Animator.StringToHash("Speed");
+    private readonly int groundedHash = Animator.StringToHash("IsGrounded");
 
     public void PlayAnimation(string name, int layer = default, float normalizedTime = default)
     {
@@ -14,6 +15,12 @@ public class PlayerVisuals : MonoBehaviour
 
     public void UpdateMoveAnimation(float normalizedSpeed)
     {
-        animator.SetFloat(SpeedHash, normalizedSpeed);
+        float finalSpeed = normalizedSpeed < 0.01f ? 0f : normalizedSpeed;
+        animator.SetFloat("Speed", finalSpeed);
+    }
+
+    public void UpdateGroundedStatus(bool isGrounded)
+    {
+        animator.SetBool(groundedHash, isGrounded);
     }
 }

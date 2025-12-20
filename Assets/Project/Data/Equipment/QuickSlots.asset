@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: QuickSlots
   m_EditorClassIdentifier: Assembly-CSharp::QuickSlotsSO
   equippedItems: []
-  selectedIndex: 1
+  selectedIndex: 0

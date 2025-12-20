@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class EntityStats : MonoBehaviour, IInitializable
+public class EntityStats : MonoBehaviour
 {
     public float maxHealth = 100;
     public float currentHealth;
@@ -9,7 +9,6 @@ public class EntityStats : MonoBehaviour, IInitializable
     public Action OnHeal;
     public Action OnTakeDamage;
 
-    public virtual void Initialize() { }
     public virtual void Heal(float amount) { }
     public virtual void TakeDamage(float amount) { }
 }

@@ -31,20 +31,19 @@ public class PlayerController : MonoBehaviour, IInitializable, IGameService
 
         // Events subscription
         InputReader.Input.InventoryRequest += HandleInventoryInput;
-    }
-
-    private void OnEnable()
-    {
-        //Mover.OnSpeedChanged += visuals.UpdateMoveAnimation;
+        Mover.OnSpeedChanged += visuals.UpdateMoveAnimation;
+        Mover.OnGroundedChanged += visuals.UpdateGroundedStatus;
     }
 
     private void Start() => TransitionTo(Idle);
 
     private void Update() => currentState?.Update();
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        //Mover.OnSpeedChanged -= visuals.UpdateMoveAnimation;
+        InputReader.Input.InventoryRequest -= HandleInventoryInput;
+        Mover.OnSpeedChanged -= visuals.UpdateMoveAnimation;
+        Mover.OnGroundedChanged -= visuals.UpdateGroundedStatus;
     }
 
     public void TransitionTo(PlayerState newState)

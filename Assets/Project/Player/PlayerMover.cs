@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMover : MonoBehaviour
@@ -14,7 +15,8 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float gravity = -9.81f;
 
     // Optional: An event for anyone who wants to listen
-    public event System.Action<float> OnSpeedChanged;
+    public event Action<float> OnSpeedChanged;
+    public event Action<bool> OnGroundedChanged;
 
     // References and Internal Status
     public CharacterController Controller { get; private set; }
@@ -26,9 +28,14 @@ public class PlayerMover : MonoBehaviour
     private float _targetRotation;
     private float _rotationVelocity;
 
-    private void Awake()
+    private void Start()
     {
         Controller = GetComponent<CharacterController>();
+    }
+
+    private void Update()
+    {
+        ApplyMovement(Vector2.zero, 0f);
     }
 
     public void Move(Vector2 inputDirection, float inputMagnitude)
@@ -52,27 +59,33 @@ public class PlayerMover : MonoBehaviour
 
     private void ApplyMovement(Vector2 direction, float inputMagnitude)
     {
-        // 1. Calculation of horizontal velocity
+        // 1. Calculation of horizontal velocity (Lerp with snap to 0)
         float targetSpeed = (direction == Vector2.zero) ? 0f : moveSpeed * inputMagnitude;
 
-        // Simple lerp to smooth acceleration
-        _currentSpeed = Mathf.Lerp(_currentSpeed, targetSpeed, Time.deltaTime * speedChangeRate);
+        if (Mathf.Abs(_currentSpeed - targetSpeed) < 0.01f) _currentSpeed = targetSpeed;
+        else _currentSpeed = Mathf.Lerp(_currentSpeed, targetSpeed, Time.deltaTime * speedChangeRate);
 
-        // 2. Gravity calculation (so that the character does not float)
+        // 2. Gravity (Independent of input)
         if (Controller.isGrounded)
         {
             if (_verticalVelocity < 0.0f) _verticalVelocity = -2f;
         }
         else
         {
-            if (_verticalVelocity > -_terminalVelocity) _verticalVelocity += gravity * Time.deltaTime;
+            _verticalVelocity += gravity * Time.deltaTime;
+
+            if (_verticalVelocity < -_terminalVelocity) 
+                _verticalVelocity = -_terminalVelocity;
         }
 
-        // 3. Combine direction and vertical movement
+        // 3. Apply Movement
         Vector3 moveDir = new Vector3(direction.x, 0, direction.y).normalized;
-        Vector3 finalMotion = moveDir * _currentSpeed + Vector3.up * _verticalVelocity;
+        Vector3 finalMotion = (moveDir * _currentSpeed) + (Vector3.up * _verticalVelocity);
 
         Controller.Move(finalMotion * Time.deltaTime);
+
+        // 4. Notify changes
         OnSpeedChanged?.Invoke(CurrentSpeedNormalized);
+        OnGroundedChanged?.Invoke(Controller.isGrounded);
     }
 }
