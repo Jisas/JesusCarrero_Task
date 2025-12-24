@@ -2,5 +2,5 @@
 
 public static class InventoryEvents
 {
-    public static Action<bool> OnInventoryRequest;
+    
 }

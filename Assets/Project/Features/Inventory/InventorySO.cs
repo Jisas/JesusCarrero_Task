@@ -126,7 +126,27 @@ public class InventorySO : ScriptableObject
     {
         OnInventoryUpdated?.Invoke();
     }
+    public bool HasSpace(ItemSO item, int amount = 1)
+    {
+        // 1. If the item is stackable, check if there is a slot with the same item that has space.
+        if (item.isStackable)
+        {
+            foreach (var slot in slots)
+            {
+                // If the slot has the same item and the total quantity does not exceed the maximum stack, proceed.
+                if (!slot.isEmpty && slot.item == item && (slot.amount + amount) <= item.maxStack)
+                {
+                    return true;
+                }
+            }
+        }
 
+        // 2. If it cannot be stacked (or there is no space in the stacks), look for an empty slot.
+        return slots.Exists(s => s.isEmpty);
+    }
+
+
+#if UNITY_EDITOR
     /// <summary>
     /// Resets the slots to their empty state
     /// </summary>
@@ -136,4 +156,5 @@ public class InventorySO : ScriptableObject
         UnityEditor.EditorUtility.SetDirty(this);
         UnityEditor.AssetDatabase.SaveAssets(); // Force Unity to save the change to disk
     }
+#endif
 }

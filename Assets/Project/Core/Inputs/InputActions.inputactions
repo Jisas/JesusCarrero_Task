@@ -16,6 +16,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "68728ee8-b3c0-42af-9829-1f60d8db8ac2",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "Attack",
                     "type": "Button",
                     "id": "6c2ab1b8-8984-453a-af3d-a3c78ae1679a",
@@ -52,6 +61,24 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "UseItem",
+                    "type": "Button",
+                    "id": "033aeb0b-779d-4567-b93d-91a31b0eceed",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Zoom",
+                    "type": "Value",
+                    "id": "713847f5-db58-47ca-97c5-8a1c9e11bc61",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "InventoryRequest",
                     "type": "Button",
                     "id": "e349958f-cc68-4a5f-9cb9-f1796aaed9db",
@@ -61,9 +88,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "UseItem",
+                    "name": "MenuRequest",
                     "type": "Button",
-                    "id": "033aeb0b-779d-4567-b93d-91a31b0eceed",
+                    "id": "72550a55-6d01-4c98-8c01-3a4a5bf39c20",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -200,6 +227,50 @@
                     "processors": "",
                     "groups": "Joystick",
                     "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e20a71b2-1f35-4366-9ea9-66005d5e81af",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "ScaleVector2(x=100,y=100)",
+                    "groups": ";Gamepad",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "be19d3c0-3696-4446-8d0b-122a8958978f",
+                    "path": "<Pointer>/delta",
+                    "interactions": "",
+                    "processors": "DeltaTimeScale,ScaleVector2(x=0.1,y=0.1)",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c6bbaac8-9986-4187-ad48-1535f280dabb",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e3d32fa4-88a8-4db7-92c7-d5d372c6b3f4",
+                    "path": "<XInputController>/dpad",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Zoom",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -349,7 +420,7 @@
                 {
                     "name": "",
                     "id": "db3739c2-778a-4a6a-b140-0eedcdeaa5fb",
-                    "path": "<Gamepad>/select",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -376,6 +447,28 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "UseItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "75c7fac0-7e1f-461b-8580-57d34452642b",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "MenuRequest",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c20e9dde-c724-4842-8c44-89240cdae699",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "MenuRequest",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -479,6 +572,15 @@
                     "name": "InventoryRequest",
                     "type": "Button",
                     "id": "75ea1b8c-8314-4544-8c1c-4d73e44e9c3f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MenuRequest",
+                    "type": "Button",
+                    "id": "bb25ba84-b58f-46c8-bd86-3b7cf2901b5e",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -752,6 +854,28 @@
                 },
                 {
                     "name": "",
+                    "id": "559200bd-0d6f-4249-8806-a1a6ea7681a1",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "MenuRequest",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "33e3ad45-c0ad-4c2e-9b43-75f85c863791",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "MenuRequest",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "9e92bb26-7e3b-4ec4-b06b-3c8f8e498ddc",
                     "path": "*/{Submit}",
                     "interactions": "",
@@ -918,7 +1042,7 @@
                 {
                     "name": "",
                     "id": "e3e0b35e-fba4-4cc1-bb43-c630ec46ecee",
-                    "path": "<Gamepad>/select",
+                    "path": "<Gamepad>/start",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",

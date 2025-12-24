@@ -19,8 +19,6 @@ public class DialogueManager : MonoBehaviour, IGameService
         IsDialogueActive = true;
 
         OnDialogueStarted?.Invoke(dialogue.speakerName, dialogue.lines[0]);
-
-        Debug.Log("Inicio el dialogo");
     }
 
     public void AdvanceDialogue()
@@ -30,7 +28,6 @@ public class DialogueManager : MonoBehaviour, IGameService
         if (_currentLineIndex < _currentDialogue.lines.Length)
         {
             OnLineChanged?.Invoke(_currentDialogue.lines[_currentLineIndex]);
-            Debug.Log("Avanzo el dialogo");
         }
         else
         {
@@ -42,6 +39,5 @@ public class DialogueManager : MonoBehaviour, IGameService
     {
         IsDialogueActive = false;
         OnDialogueEnded?.Invoke();
-        Debug.Log("Termino el dialogo");
     }
 }

@@ -26,7 +26,7 @@ public class InventoryDisplay : MonoBehaviour
         _inventory = inventory;
         _equipment = equipment;
 
-        InventoryEvents.OnInventoryRequest += HandleDisplay;
+        ProjectExtensions.OnInventoryRequest += HandleDisplay;
         _inventory.OnInventoryUpdated += RefreshUI;
 
         inventoryPanel.SetActive(false);
@@ -151,7 +151,7 @@ public class InventoryDisplay : MonoBehaviour
 
     private void OnDestroy()
     {
-        InventoryEvents.OnInventoryRequest -= HandleDisplay;
+        ProjectExtensions.OnInventoryRequest -= HandleDisplay;
         _inventory.OnInventoryUpdated -= RefreshUI;
     }
 }

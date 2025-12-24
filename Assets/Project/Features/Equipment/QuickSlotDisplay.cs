@@ -7,6 +7,7 @@ public class QuickSlotDisplay : MonoBehaviour, IInitializable, IGameService
     [SerializeField] private QuickSlotsSO data;
     [SerializeField] private Image icon;
     [SerializeField] private TextMeshProUGUI textAmount;
+    [SerializeField] private TextMeshProUGUI textName;
 
     public void Initialize()
     {
@@ -22,12 +23,14 @@ public class QuickSlotDisplay : MonoBehaviour, IInitializable, IGameService
             icon.enabled = true;
             icon.sprite = data.equippedItems[id].item.icon;
             textAmount.text = data.equippedItems[id].amount.ToString();
+            textName.text = data.equippedItems[id].item.itemName;
         }
         else
         {
             icon.enabled = false;
             icon.sprite = null;
             textAmount.text = string.Empty;
+            textName.text = string.Empty;
         }
     }
 

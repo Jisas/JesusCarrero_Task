@@ -15,18 +15,28 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
 
 
     // --- Centralized Persistence Logic ---
-    public void SaveAllData(InventorySO inventory, QuickSlotsSO quickSlots)
+    public void SaveAllData(InventorySO inventory, QuickSlotsSO quickSlots, CurrencySO currency)
     {
         gameData.inventoryData = inventory.GetSaveData();
         gameData.quickSlotsData = quickSlots.GetSaveData();
         gameData.selectedQuickSlotIndex = quickSlots.selectedIndex;
+        gameData.currentGold = currency.TotalGold;
 
         string json = JsonUtility.ToJson(gameData, true);
         File.WriteAllText(_savePath, json);
 
         Debug.Log("Game data saved");
     }
-    public void LoadAllData(InventorySO inventory, QuickSlotsSO quickSlots, ItemDatabaseSO database)
+    public void ManualSaveAllData()
+    {
+        InventorySO inventory = ServiceLocator.Get<InventoryManager>().Inventory;
+        QuickSlotsSO equipment = ServiceLocator.Get<QuickSlotsSO>();
+        CurrencySO currency = ServiceLocator.Get<CurrencySO>();
+
+        SaveAllData(inventory, equipment, currency);
+        Debug.Log("<color=green>SaveManager: Manually saved data.</color>");
+    }
+    public void LoadAllData(InventorySO inventory, QuickSlotsSO quickSlots, ItemDatabaseSO database, CurrencySO currency)
     {
         if (!File.Exists(_savePath)) return;
 
@@ -38,6 +48,7 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
             inventory.LoadFromSaveData(gameData.inventoryData, database);
             quickSlots.LoadFromSaveData(gameData.quickSlotsData, database);
             quickSlots.selectedIndex = gameData.selectedQuickSlotIndex;
+            currency.SetGold(gameData.currentGold);
 
             LoadDroppedItems(database);
         }
@@ -101,49 +112,6 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
     {
         gameData.droppedItems.RemoveAll(i => i.uniqueID == uID);
     }
-    public static SettingsData LoadSettings()
-    {
-        string path = Application.persistentDataPath + "/settings.json";
-
-        if (File.Exists(path))
-        {
-            string json = File.ReadAllText(path);
-            return JsonUtility.FromJson<SettingsData>(json);
-        }
-        else
-        {
-            Resolution[] resolutions = Screen.resolutions;
-            Resolution currentResolution = Screen.currentResolution;
-            int currentResolutionIndex = -1;
-
-            foreach (var res in resolutions)
-            {
-                if (res.width == currentResolution.width && res.height == currentResolution.height)
-                    currentResolutionIndex = resolutions.IndexOfItem(res);
-            }
-
-            return new SettingsData()
-            {
-                Quality = 0,
-                ScreenResolution = currentResolutionIndex,
-                ScreenMode = 0,
-                TextureResolution = 0,
-                ShadowQuality = 2,
-                ShadowResolution = 2,
-                RenderScale = 1,
-                FrameRate = 2,
-                Brightness = 1,
-                AntiAliasing = true,
-
-                GeneralVolume = 1,
-                MusicVolume = 1,
-                AmbientalVolume = 1,
-                EffectsVolume = 1,
-                UIVolume = 0.1f,
-            };
-        }
-    }
-    public SettingsData GetSettingsData() => gameData.settingsData;
 
 
     // --- Exclusive Editor's Block ---
@@ -164,31 +132,26 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
     }
 
 #if UNITY_EDITOR
-    public void SaveFromEditor()
-    {
-        InventorySO inventory = ServiceLocator.Get<InventoryManager>().Inventory;
-        QuickSlotsSO equipment = ServiceLocator.Get<QuickSlotsSO>();
-
-        SaveAllData(inventory, equipment);
-        Debug.Log("<color=green>SaveManager: Manually saved data.</color>");
-    }
-
     private void CleanAllScriptableObjects()
     {
         InventorySO inventory = null;
         QuickSlotsSO quickSlots = null;
+        CurrencySO currency = null;
 
         if (Application.isPlaying)
         {
             var invManager = ServiceLocator.Get<InventoryManager>();
+            quickSlots = ServiceLocator.Get<QuickSlotsSO>();
+            currency = ServiceLocator.Get<CurrencySO>();
+
             if (invManager != null) inventory = invManager.Inventory;
 
-            quickSlots = ServiceLocator.Get<QuickSlotsSO>();
         }
         else
         {
             inventory = FindAssetByType<InventorySO>();
             quickSlots = FindAssetByType<QuickSlotsSO>();
+            currency= FindAssetByType<CurrencySO>();
         }
 
         if (inventory != null)
@@ -201,6 +164,11 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
         {
             quickSlots.ClearEquipment();
             Debug.Log("<color=yellow>SaveManager: QuickSlotsSO reset.</color>");
+        }
+
+        if (currency != null)
+        {
+            currency.SetGold(0);
         }
 
         UnityEditor.AssetDatabase.SaveAssets();

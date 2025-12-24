@@ -11,6 +11,7 @@ public abstract class ItemSO : ScriptableObject
 
     [Header("Settings")]
     public ItemType type;
+    public int buyPrice;
     [Tooltip("Will be use just for consumables")] 
     public float value;
     public bool isStackable;

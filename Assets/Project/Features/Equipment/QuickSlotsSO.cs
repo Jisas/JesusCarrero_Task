@@ -67,10 +67,12 @@ public class QuickSlotsSO : ScriptableObject, IInitializable, IGameService
         return false;
     }
 
+#if UNITY_EDITOR
     public void ClearEquipment()
     {
         equippedItems.Clear();
         UnityEditor.EditorUtility.SetDirty(this);
         UnityEditor.AssetDatabase.SaveAssets(); // Force Unity to save the change to disk
     }
+#endif
 }

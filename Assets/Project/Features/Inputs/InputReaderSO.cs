@@ -18,6 +18,7 @@ public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions, Inpu
     public event UnityAction UseItem;
     public event UnityAction<int> Next;
     public event UnityAction<int> Previous;
+    public event UnityAction MenuRequest;
 
     public void Initialize()
     {
@@ -74,7 +75,14 @@ public class InputReaderSO : ScriptableObject, InputActions.IPlayerActions, Inpu
         if (context.performed) Next?.Invoke(1);
     }
 
+    public void OnMenuRequest(InputAction.CallbackContext context)
+    {
+        if (context.performed) MenuRequest?.Invoke();
+    }
+
+    public void OnLook(InputAction.CallbackContext context) { }
     public void OnAttack(InputAction.CallbackContext context) { }
+    public void OnZoom(InputAction.CallbackContext context) { }
     public void OnNavigate(InputAction.CallbackContext context) { }
     public void OnSubmit(InputAction.CallbackContext context) { }
     public void OnCancel(InputAction.CallbackContext context) { }

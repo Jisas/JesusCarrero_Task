@@ -1,5 +1,5 @@
 
-public enum InteractionType { Pickup, Talk }
+public enum InteractionType { Pickup, Talk, Buy }
 public interface IInteractable
 {
     InteractionType Type { get; }

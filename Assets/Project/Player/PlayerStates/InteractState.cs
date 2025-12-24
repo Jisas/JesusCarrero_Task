@@ -1,13 +1,18 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InteractState : PlayerState
 {
     private IInteractable target;
     private readonly DialogueManager _dialogueManager;
+    private readonly SaleManager _saleManager;
+    private readonly VendorDisplay _vendorDisplay;
 
     public InteractState(PlayerController context) : base(context)
     {
         _dialogueManager = ServiceLocator.Get<DialogueManager>();
+        _saleManager = ServiceLocator.Get<SaleManager>();
+        _vendorDisplay = ServiceLocator.Get<VendorDisplay>();
     }
 
     public override void Enter()
@@ -23,25 +28,26 @@ public class InteractState : PlayerState
             case InteractionType.Talk:
                 OnNPCInteract();
                 break;
+
+            case InteractionType.Buy:
+                OnBuyInteract();
+                break;
         }
     }
 
     private void OnItemInteract()
     {
-        //context.Visuals.PlayAnimation("Pickup");
         context.Interactor.DoInteraction(context);
         context.TransitionTo(context.Idle);
     }
 
     private void OnNPCInteract()
     {
-       //context.Visuals.PlayAnimation("Talk");
         context.InputReader.Input.InteractEvent += OnInteractPressed;
         _dialogueManager.OnDialogueEnded += EndDialogue;
-
-        // Execute the initial interaction (which triggers the dialogue in the NPC).
         context.Interactor.DoInteraction(context);
     }
+
 
     private void OnInteractPressed()
     {
@@ -56,12 +62,42 @@ public class InteractState : PlayerState
         context.TransitionTo(context.Idle);
     }
 
+    private void OnBuyInteract()
+    {
+        _saleManager.OnSaleEnded += EndSale;
+        _vendorDisplay.OnDisplayStart += OnStartSale;
+        context.Interactor.DoInteraction(context);
+    }
+
+    private void OnStartSale()
+    {
+        context.InputReader.SwitchToUI();
+        EventSystem.current.SetSelectedGameObject(_vendorDisplay.GetFirstButton());
+    }
+
+    private void EndSale()
+    {
+        _vendorDisplay.SetWindowDisplay(false);
+        context.TransitionTo(context.Idle);
+    }
+
     public override void Exit()
     {
-        if (target.Type == InteractionType.Talk)
+        switch (target.Type)
         {
-            context.InputReader.Input.InteractEvent -= OnInteractPressed;
-            _dialogueManager.OnDialogueEnded -= EndDialogue;
+            case InteractionType.Pickup:
+                break;
+
+            case InteractionType.Talk:
+                context.InputReader.Input.InteractEvent -= OnInteractPressed;
+                _dialogueManager.OnDialogueEnded -= EndDialogue;
+                break;
+
+            case InteractionType.Buy:
+                _vendorDisplay.OnDisplayStart -= OnStartSale;
+                _saleManager.OnSaleEnded -= EndSale;
+                context.InputReader.SwitchToPlayer();
+                break;
         }
     }
 

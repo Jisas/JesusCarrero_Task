@@ -19,7 +19,7 @@ public class SaveManagerEditor : Editor
         if (GUILayout.Button("Save Current Game", GUILayout.Height(30)))
         {
             if (Application.isPlaying)
-                manager.SaveFromEditor();
+                manager.ManualSaveAllData();
             else
                 Debug.LogWarning("It must be in Play mode to save the current status.");
         }
