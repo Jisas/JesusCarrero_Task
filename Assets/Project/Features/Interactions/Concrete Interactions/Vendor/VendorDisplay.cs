@@ -20,7 +20,7 @@ public class VendorDisplay : MonoBehaviour, IGameService
     {
         saleManager = ServiceLocator.Get<SaleManager>();
 
-        saleManager.OnInvemtoryFull += UpdatePrompt;
+        saleManager.OnInventoryFull += UpdatePrompt;
         saleManager.OnInsufficientFunds += UpdatePrompt;
 
         if (vendorSlotsParent.childCount > 0)
@@ -49,7 +49,7 @@ public class VendorDisplay : MonoBehaviour, IGameService
     {
         if (value == false)
         {
-            saleManager.OnInvemtoryFull -= UpdatePrompt;
+            saleManager.OnInventoryFull -= UpdatePrompt;
             saleManager.OnInsufficientFunds -= UpdatePrompt;
             UpdatePrompt(false, string.Empty);
         }

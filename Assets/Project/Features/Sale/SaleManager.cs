@@ -4,7 +4,7 @@ using System;
 public class SaleManager : MonoBehaviour, IGameService
 {
     public event Action OnSaleEnded;
-    public event Action<bool, string> OnInvemtoryFull;
+    public event Action<bool, string> OnInventoryFull;
     public event Action<bool, string> OnInsufficientFunds;
 
     public void OnEndSale() => OnSaleEnded?.Invoke();
@@ -32,7 +32,7 @@ public class SaleManager : MonoBehaviour, IGameService
             else
             {
                 prompt = inventoryFullPrompt;
-                OnInvemtoryFull?.Invoke(true, prompt);
+                OnInventoryFull?.Invoke(true, prompt);
                 Debug.Log("<color=red>SInventario full.</color>");
             }
         }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using UnityEngine.UIElements;
 
 public class SaveManager : MonoBehaviour, IInitializable, IGameService
 {
@@ -15,12 +16,19 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
 
 
     // --- Centralized Persistence Logic ---
-    public void SaveAllData(InventorySO inventory, QuickSlotsSO quickSlots, CurrencySO currency)
+    public void SaveAllData(Transform playerTransform, InventorySO inventory, QuickSlotsSO quickSlots, CurrencySO currency)
     {
+        gameData.playerData.position.x = playerTransform.position.x;
+        gameData.playerData.position.y = playerTransform.position.y;
+        gameData.playerData.position.z = playerTransform.position.z;
+        gameData.playerData.rotation.x = playerTransform.rotation.x;
+        gameData.playerData.rotation.y = playerTransform.rotation.y;
+        gameData.playerData.rotation.z = playerTransform.rotation.z;
+        gameData.playerData.rotation.w = playerTransform.rotation.w;
         gameData.inventoryData = inventory.GetSaveData();
         gameData.quickSlotsData = quickSlots.GetSaveData();
-        gameData.selectedQuickSlotIndex = quickSlots.selectedIndex;
-        gameData.currentGold = currency.TotalGold;
+        gameData.playerData.selectedQuickSlotIndex = quickSlots.selectedIndex;
+        gameData.playerData.currentGold = currency.TotalGold;
 
         string json = JsonUtility.ToJson(gameData, true);
         File.WriteAllText(_savePath, json);
@@ -32,11 +40,12 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
         InventorySO inventory = ServiceLocator.Get<InventoryManager>().Inventory;
         QuickSlotsSO equipment = ServiceLocator.Get<QuickSlotsSO>();
         CurrencySO currency = ServiceLocator.Get<CurrencySO>();
+        Transform playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
-        SaveAllData(inventory, equipment, currency);
+        SaveAllData(playerTransform, inventory, equipment, currency);
         Debug.Log("<color=green>SaveManager: Manually saved data.</color>");
     }
-    public void LoadAllData(InventorySO inventory, QuickSlotsSO quickSlots, ItemDatabaseSO database, CurrencySO currency)
+    public void LoadAllData(Transform playerTransform, InventorySO inventory, QuickSlotsSO quickSlots, ItemDatabaseSO database, CurrencySO currency)
     {
         if (!File.Exists(_savePath)) return;
 
@@ -45,10 +54,23 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
             string json = File.ReadAllText(_savePath);
             gameData = JsonUtility.FromJson<GameData>(json);
 
+            Vector3 savedPosition = new (
+                gameData.playerData.position.x,
+                gameData.playerData.position.y,
+                gameData.playerData.position.z);
+
+            Quaternion savedRotation = new (
+                gameData.playerData.rotation.x,
+                gameData.playerData.rotation.y,
+                gameData.playerData.rotation.z,
+                gameData.playerData.rotation.w);
+
+            playerTransform.position = savedPosition == Vector3.zero ? playerTransform.position : savedPosition;
+            playerTransform.rotation = savedRotation;
             inventory.LoadFromSaveData(gameData.inventoryData, database);
             quickSlots.LoadFromSaveData(gameData.quickSlotsData, database);
-            quickSlots.selectedIndex = gameData.selectedQuickSlotIndex;
-            currency.SetGold(gameData.currentGold);
+            quickSlots.selectedIndex = gameData.playerData.selectedQuickSlotIndex;
+            currency.SetGold(gameData.playerData.currentGold);
 
             LoadDroppedItems(database);
         }

@@ -4,6 +4,7 @@ using UnityEngine;
 public class MenuDisplay : MonoBehaviour, IInitializable
 {
     [SerializeField] private GameObject menuCanvas;
+    [SerializeField] private GameObject inputsGuideCanvas;
     [SerializeField] private GameObject firstSelected;
 
     public void Initialize()
@@ -14,6 +15,9 @@ public class MenuDisplay : MonoBehaviour, IInitializable
     private void HandleDisplay(bool shouldShow)
     {
         menuCanvas.SetActive(shouldShow);
+
+        if (inputsGuideCanvas.activeInHierarchy && shouldShow == false)
+            inputsGuideCanvas.SetActive(false);
 
         if (shouldShow)
         {

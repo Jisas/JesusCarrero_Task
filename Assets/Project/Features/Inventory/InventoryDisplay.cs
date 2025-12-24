@@ -102,7 +102,7 @@ public class InventoryDisplay : MonoBehaviour
 
         // Visual logic/world: Physically drop the object
         var player = ServiceLocator.Get<PlayerController>();
-        Vector3 objectRelativePos = new (player.transform.position.x, 0.2f, player.transform.position.z);
+        Vector3 objectRelativePos = new (player.transform.position.x, 0.7f, player.transform.position.z);
         Vector3 dropPos = objectRelativePos + player.transform.forward * 1.5f;
 
         

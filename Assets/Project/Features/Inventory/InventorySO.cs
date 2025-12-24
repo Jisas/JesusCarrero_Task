@@ -92,6 +92,24 @@ public class InventorySO : ScriptableObject
         slots[index].Clear();
         NotifyUpdated();
     }
+    public void RemoveItem(int index, int amount)
+    {
+        if (index < 0 || index >= slots.Count) return;
+
+        var currentItem = slots[index].item;
+        var curentSlot = slots[index];
+        var currentISlotIndex = slots.IndexOf(curentSlot);
+
+        if (!curentSlot.isEmpty && curentSlot.item == currentItem)
+        {
+            curentSlot.amount -= amount;
+
+            if (curentSlot.amount <= 0)
+                curentSlot.Clear();
+        }
+
+        NotifyUpdated();
+    }
     public void SwapSlots(int indexA, int indexB)
     {
         (slots[indexB], slots[indexA]) = (slots[indexA], slots[indexB]);
@@ -101,8 +119,8 @@ public class InventorySO : ScriptableObject
     {
         if (index < 0 || index >= slots.Count) return;
 
-        slots[index].Clear();
-        OnInventoryUpdated?.Invoke(); // Aquí sí tienes permiso para invocarlo
+        RemoveItem(index, 1);
+        OnInventoryUpdated?.Invoke();
     }
     public void UseItem(int index)
     {

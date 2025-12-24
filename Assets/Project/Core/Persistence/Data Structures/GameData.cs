@@ -4,9 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public class GameData
 {
-    public int currentGold = 5000;
-    public int selectedQuickSlotIndex = 0;
-    [Space(10)]
+    public PlayerData playerData = new();
     public InventoryData inventoryData = new();
     public InventoryData quickSlotsData = new();
     public List<string> collectedItemIDs = new();

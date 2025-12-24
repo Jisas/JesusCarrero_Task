@@ -25,6 +25,9 @@ public class GameBootstrapper : MonoBehaviour
     [SerializeField] private CurrencyDisplay currencyDisplay;
     [SerializeField] private VendorDisplay vendorDisplay;
 
+    [Header("Others")]
+    public Transform playerTransform;
+
     private void Awake()
     {
         // 1. Service registration
@@ -48,7 +51,7 @@ public class GameBootstrapper : MonoBehaviour
         inventoryManager.Initialize();
         currencyDisplay.Initialize();
 
-        saveManager.LoadAllData(inventoryManager.Inventory, quickSlots, itemDB, currency);
+        saveManager.LoadAllData(playerTransform, inventoryManager.Inventory, quickSlots, itemDB, currency);
 
         inputReader.Initialize();
         menuDisplay.Initialize();
@@ -65,7 +68,7 @@ public class GameBootstrapper : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        saveManager.SaveAllData(inventoryManager.Inventory, quickSlots, currency);
+        saveManager.SaveAllData(playerTransform, inventoryManager.Inventory, quickSlots, currency);
     }
 
     public void QuitGame() => Application.Quit();
