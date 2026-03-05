@@ -200,6 +200,7 @@ public class SaveManager : MonoBehaviour, IInitializable, IGameService
     private T FindAssetByType<T>() where T : UnityEngine.Object
     {
         string[] guids = UnityEditor.AssetDatabase.FindAssets($"t:{typeof(T).Name}");
+
         if (guids.Length > 0)
         {
             string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);

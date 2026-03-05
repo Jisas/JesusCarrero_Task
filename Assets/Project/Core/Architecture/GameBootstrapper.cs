@@ -30,6 +30,9 @@ public class GameBootstrapper : MonoBehaviour
 
     private void Awake()
     {
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = 60;
+
         // 1. Service registration
         ServiceLocator.Register<ItemDatabaseSO>(itemDB);
         ServiceLocator.Register<InputReaderSO>(inputReader);
